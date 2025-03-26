@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useRegisterMutation } from "../../../redux/slices/authSlice";
 import catchFunction from "../../../common/catchFunction";
@@ -10,6 +10,9 @@ export const MemberRegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [registerApi] = useRegisterMutation();
+  useEffect(()=>{
+      localStorage.clear()
+    },[])
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setValues((pre) => ({ ...pre, [name]: value }));

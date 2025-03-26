@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRegisterMutation } from "../../../redux/slices/authSlice";
 import { IoEye, IoEyeOff } from "react-icons/io5";
@@ -11,6 +11,9 @@ export const UserRegisterPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [registerApi] = useRegisterMutation();
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setValues((pre) => ({ ...pre, [name]: value }));

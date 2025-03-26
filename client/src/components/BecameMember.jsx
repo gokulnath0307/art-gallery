@@ -1,7 +1,9 @@
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function BecameMemeber() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   return (
     <div className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-8xl sm:px-6 lg:px-8">
@@ -12,7 +14,10 @@ export default function BecameMemeber() {
           <p className="mx-auto mt-6 max-w-lg text-center text-lg text-gray-300">We’re changing the way people connect</p>
           <div className="mx-auto mt-10 flex max-w-md justify-center gap-x-4">
             <button
-              onClick={() => navigate("/member-login")}
+              onClick={() => {
+                navigate("/member-login");
+                dispatch({ type: "ISMEMBER" });
+              }}
               className="flex rounded-md bg-white px-10 py-5 cursor-pointer text-sm font-semibold text-gray-900 shadow-xs hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               Let's Join

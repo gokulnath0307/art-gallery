@@ -1,6 +1,6 @@
 import { IoEye, IoEyeOff } from "react-icons/io5";
 import { useLoginMutation } from "../../../redux/slices/authSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import catchFunction from "../../../common/catchFunction";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,9 @@ export const MemberLoginPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loginApi] = useLoginMutation();
-
+  useEffect(()=>{
+    localStorage.clear()
+  },[])
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setValues((pre) => ({ ...pre, [name]: value }));

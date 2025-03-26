@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/slices/authSlice";
 import toast from "react-hot-toast";
@@ -11,7 +11,9 @@ export const UserLoginPage = () => {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [loginApi] = useLoginMutation();
-
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   const handleChangeInput = (event) => {
     const { name, value } = event.target;
     setValues((pre) => ({ ...pre, [name]: value }));

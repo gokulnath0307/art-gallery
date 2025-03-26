@@ -25,7 +25,7 @@ export default function ProductDetails() {
   if (isLoading) return <div className="text-center py-10">Loading...</div>;
   if (isError || !product) return <div className="text-center py-10 text-red-500">Product not found!</div>;
   const handleAddProductToCart = async () => {
-    dispatch(setCartProduct(product));
+    dispatch(setCartProduct({ ...product}));
     navigate("/cart-product");
   };
   return (

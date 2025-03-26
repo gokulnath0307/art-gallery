@@ -1,19 +1,33 @@
 import { useNavigate } from "react-router-dom";
-import { getProductSliceData, useLazyGetAllUserProductQuery } from "../../../../redux/slices/productSlice";
+import { getProductSliceData, useDeleteProductMutation, useLazyGetAllUserProductQuery } from "../../../../redux/slices/productSlice";
 import { useEffect } from "react";
 import catchFunction from "../../../../common/catchFunction";
 import { useSelector } from "react-redux";
+import toast from "react-hot-toast";
 
 export default function CreatedProductList() {
   const navigate = useNavigate();
   const [getAllUserProductDataApi] = useLazyGetAllUserProductQuery();
   const { userProductTableData } = useSelector(getProductSliceData);
+  const [deleteProductApi] = useDeleteProductMutation();
   useEffect(() => {
     getAllUserProductData();
   }, []);
   const getAllUserProductData = async () => {
     try {
       await getAllUserProductDataApi().unwrap();
+    } catch (error) {
+      catchFunction(error);
+    }
+  };
+  const handleEdit = (value) => {
+    navigate(`/member/product/create?id=${value}`);
+  };
+  const handleDelete = async (value) => {
+    alert("You want to delete this product");
+    try {
+      await deleteProductApi(value).unwrap();
+      toast.success("Product Deleted");
     } catch (error) {
       catchFunction(error);
     }
@@ -36,7 +50,7 @@ export default function CreatedProductList() {
           <table className="min-w-full divide-y divide-gray-300">
             <thead>
               <tr>
-                {["Title", "Price", "Size", "Dimensions",'Image'].map((heading) => (
+                {["Title", "Price", "Size", "Dimensions", "Image"].map((heading) => (
                   <th key={heading} className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     {heading}
                   </th>
@@ -45,7 +59,7 @@ export default function CreatedProductList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {userProductTableData.map(({ title, price, size, dimensions, image }, index) => (
+              {userProductTableData.map(({ title, price, size, dimensions, image, _id }, index) => (
                 <tr key={index}>
                   <td className="px-3 py-4 text-sm font-medium text-gray-900">{title}</td>
                   <td className="px-3 py-4 text-sm text-gray-500">{price}</td>
@@ -58,8 +72,12 @@ export default function CreatedProductList() {
                   </td>
                   <td className="px-3 py-4 text-right text-sm font-medium">
                     <div className="inline-flex gap-2">
-                      <button className="text-blue-600 hover:underline cursor-pointer">Edit</button>
-                      <button className="text-red-600 hover:underline cursor-pointer">Delete</button>
+                      <button className="text-blue-600 hover:underline cursor-pointer" onClick={() => handleEdit(_id)}>
+                        Edit
+                      </button>
+                      <button className="text-red-600 hover:underline cursor-pointer" onClick={() => handleDelete(_id)}>
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>

@@ -11,6 +11,6 @@ Router.post("/login", login);
 
 Router.use("/user", UserRouter);
 Router.use("/cart", authenticate, CartRouter);
-Router.use("/order", authenticate, OrderRouter);
+Router.use("/order",  OrderRouter);
 Router.use("/product", authenticate, authorizeRoles, ProductRouter);
 module.exports = Router;

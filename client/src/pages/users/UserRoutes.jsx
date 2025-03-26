@@ -11,6 +11,7 @@ import AllProductList from "../../components/AllProductList";
 import ProductDetails from "../../components/ProductDetails";
 import { useSelector } from "react-redux";
 import { authSliceData } from "../../redux/slices/authSlice";
+import OrderHistory from "../../components/OrderHistory";
 
 export default function UserRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function UserRoutes() {
         <Route path="gallery-details/:productId" element={<ProductDetails />} />
         <Route path="user-login" element={<UserLoginPage />} />
         <Route path="user-register" element={<UserRegisterPage />} />
+        <Route path="order-history" element={<OrderHistory />} />
       </Routes>
       <Footer />
     </>

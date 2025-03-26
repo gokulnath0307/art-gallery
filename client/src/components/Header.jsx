@@ -63,7 +63,13 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex space-x-6">
-            <button onClick={() => navigate("/")} className="text-gray-700 hover:text-gray-900">
+            <button
+              onClick={() => {
+                navigate("/");
+               
+              }}
+              className="text-gray-700 hover:text-gray-900"
+            >
               Home
             </button>
             <button onClick={() => navigate("/gallery")} className="text-gray-700 hover:text-gray-900">
@@ -90,14 +96,9 @@ export default function Header() {
                 <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md p-4 z-50">
                   <h3 className="text-lg font-semibold border-b pb-2">Hi {username}</h3>
                   <ul className="divide-y mt-2">
-                    <li className="py-2">
-                      <button onClick={() => navigate("/profile")} className="text-gray-800 hover:text-indigo-600">
-                        Profile
-                      </button>
-                    </li>
-                    <li className="py-2">
-                      <button onClick={() => navigate("/settings")} className="text-gray-800 hover:text-indigo-600">
-                        Settings
+                    <li className="py-2 cursor-pointer">
+                      <button onClick={() => navigate("/order-history")} className="text-gray-800 hover:text-indigo-600 cursor-pointer">
+                        Order History
                       </button>
                     </li>
                     <li className="py-2">

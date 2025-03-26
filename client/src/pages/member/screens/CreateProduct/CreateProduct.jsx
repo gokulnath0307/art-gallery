@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useCreateProductMutation } from "../../../../redux/slices/productSlice";
+import React, { useEffect, useState } from "react";
+import { useCreateProductMutation, useLazyGetOneProductByIDQuery, useUpdateProductMutation } from "../../../../redux/slices/productSlice";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import catchFunction from "../../../../common/catchFunction";
 export default function CreateProduct() {
   const navigate = useNavigate();
@@ -20,18 +20,43 @@ export default function CreateProduct() {
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [createProductApi] = useCreateProductMutation();
+  const [searchparams] = useSearchParams();
+  const [getOneProductDataApi] = useLazyGetOneProductByIDQuery();
+  const [updateProductApi] = useUpdateProductMutation();
+  useEffect(() => {
+    if (searchparams.get("id")) {
+      getOneProductData(searchparams.get("id"));
+    }
+  }, [searchparams]);
+
+  const getOneProductData = async (id) => {
+    try {
+      let response = await getOneProductDataApi(id).unwrap();
+      const { title, price, size, medium, style, weight, dimensions, description, image } = response;
+      setProduct((pre) => ({ ...pre, title, price, size, medium, style, weight, dimensions, description, image }));
+      setPreview(image);
+    } catch (error) {
+      catchFunction(error);
+    }
+  };
+  // console.log(product);
+
   const validateForm = () => {
     let newErrors = {};
 
-    if (!product.title.trim()) newErrors.title = "Title is required.";
-    if (!product.price.trim() || isNaN(product.price) || product.price <= 0) newErrors.price = "Valid price is required.";
-    if (!product.size.trim()) newErrors.size = "Size is required.";
-    if (!product.medium.trim()) newErrors.medium = "Medium is required.";
-    if (!product.style.trim()) newErrors.style = "Style is required.";
-    if (!product.weight.trim() || isNaN(product.weight) || product.weight <= 0) newErrors.weight = "Valid weight is required.";
-    if (!product.dimensions.trim()) newErrors.dimensions = "Dimensions are required.";
-    if (!product.description.trim()) newErrors.description = "Description is required.";
-    if (!product.image) newErrors.image = "Image is required.";
+    if (!product?.title?.trim()) newErrors.title = "Title is required.";
+    if (!String(product?.price).trim() || isNaN(product.price) || Number(product.price) <= 0) {
+      newErrors.price = "Valid price is required.";
+    }
+    if (!product?.size?.trim()) newErrors.size = "Size is required.";
+    if (!product?.medium?.trim()) newErrors.medium = "Medium is required.";
+    if (!product?.style?.trim()) newErrors.style = "Style is required.";
+    if (!String(product?.weight).trim() || isNaN(product.weight) || Number(product.weight) <= 0) {
+      newErrors.weight = "Valid weight is required.";
+    }
+    if (!String(product?.dimensions).trim()) newErrors.dimensions = "Dimensions are required.";
+    if (!product?.description?.trim()) newErrors.description = "Description is required.";
+    if (!product?.image) newErrors.image = "Image is required.";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -77,8 +102,14 @@ export default function CreateProduct() {
 
     if (!validateForm()) return;
     try {
-      await createProductApi(product).unwrap();
-      toast.success("Product created");
+      if (searchparams.get("id")) {
+        await updateProductApi({ ...product, id: searchparams.get("id") });
+        toast.success("Product updated");
+      } else {
+        await createProductApi(product).unwrap();
+        toast.success("Product created");
+      }
+
       navigate("/member/product");
     } catch (error) {
       catchFunction(error);
@@ -185,7 +216,7 @@ export default function CreateProduct() {
         {/* Centered Submit Button */}
         <div className="col-span-2 flex justify-center mt-4 cursor-pointer">
           <button type="submit" className="bg-blue-500 text-white py-2 px-6 rounded cursor-pointer">
-            Create Product
+            {searchparams.get("id") ? "Update Product" : "Create Product"}
           </button>
         </div>
       </form>

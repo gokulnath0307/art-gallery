@@ -6,19 +6,26 @@ import { persistReducer, persistStore } from "redux-persist";
 import authSlice from "../slices/authSlice";
 import productSlice from "../slices/productSlice";
 import cartSlice from "../slices/cartSlice";
+import orderSlice from "../slices/orderSlice";
 
-const persistConfig = {
+const cartPersistConfig = {
   key: "cart",
   storage,
 };
+const authPersistConfig = {
+  key: "auth",
+  storage,
+};
 
-const persistedCartReducer = persistReducer(persistConfig, cartSlice.reducer);
+const persistedCartReducer = persistReducer(cartPersistConfig, cartSlice.reducer);
+const persistedAuthReducer = persistReducer(authPersistConfig, authSlice);
 
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
-  auth: authSlice,
+  auth: persistedAuthReducer,
   product: productSlice.reducer,
   cart: persistedCartReducer, // Only persisting cart
+  order: orderSlice.reducer,
 });
 
 export const store = configureStore({

@@ -78,7 +78,7 @@ const authSlice = createSlice({
           localStorage.setItem("membertoken", payload.token);
         } else {
           state.role = "user";
-          localStorage.setItem("usertoken", token);
+          localStorage.setItem("usertoken", payload.token);
           state.usertoken = payload.token;
         }
         state.username = payload.username;

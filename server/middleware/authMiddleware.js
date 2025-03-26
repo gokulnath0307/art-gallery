@@ -13,6 +13,7 @@ const authenticate = async (req, res, next) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     req.user = user; // Attach full user data to request
+    req.userId=user._id
     next();
   } catch (error) {
     return res.status(403).json({ message: "Invalid or expired token" });

@@ -20,6 +20,6 @@ const baseQuery = fetchBaseQuery({
 export const apiSlice = createApi({
   reducerPath: "artgalleryapi",
   baseQuery,
-  tagTypes: [],
+  tagTypes: ["memberproduct","cart"],
   endpoints: () => ({}),
 });
